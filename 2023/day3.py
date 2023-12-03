@@ -27,29 +27,6 @@ def is_adjacent(lines, number):
     result = True if number[3] < len(lines) - 1 and check_line(lines[number[3]+1], number) else result
     return result
 
-numbers=[]
-lines=[]
-
-
-### Part 1
-with open(filename, 'r') as file:
-    i=0
-    for line in file:
-        numbers.extend(find_numbers(line.strip(), i))
-        i+=1
-        lines.append(line.strip())
-    
-
-total=0
-for _ in numbers:
-    #print(_, is_adjacent(lines,_))
-    if is_adjacent(lines, _):
-        total+= _[0]
-print(f"Part 1: {total}")
-
-
-
-### Part 2
 def find_gears(s, index):
     results=[]
     size=1
@@ -63,44 +40,45 @@ def find_gears(s, index):
     return results
 
 def get_coords(number):
-    return [(x, number[3]) for x in range(number[1], number[2]+1)] 
+    return set([(x, number[3]) for x in range(number[1], number[2]+1)])
+
 def gear_adjacent(gear, numbers):
-    '''
-    ...
-    .*. [symbol, left, right, line]
-    ...
-    '''
     count = 0
     adjacent=[]
-    potential = [
+    potential = set([ 
         (gear[1]-1, gear[3]-1), (gear[1], gear[3]-1), (gear[1]+1, gear[3]-1),
         (gear[1]-1, gear[3]),   (gear[1], gear[3]),   (gear[1]+1, gear[3]),
-        (gear[1]-1, gear[3]+1), (gear[1], gear[3]+1), (gear[1]+1, gear[3]+1),
-        ]
-    #print(potential)
+        (gear[1]-1, gear[3]+1), (gear[1], gear[3]+1), (gear[1]+1, gear[3]+1)])
     for i, number in enumerate(numbers):
-        coords = get_coords(number)
-        for coord in coords:
-            if coord in potential:
-                count+=1
-                adjacent.append(number)
-                break 
-        
+        if get_coords(number) & potential:
+            count += 1
+            adjacent.append(number)
     if count == 2:
         return adjacent 
-    return []
 
-gears = []
+numbers, lines, gears = [], [], []
+total, prod = 0, 0
+
 with open(filename, 'r') as file:
-    i=0
-    for line in file:
-        gears.extend(find_gears(line.strip(), i))
-        i+=1
+    for i, line in enumerate(file):
+        numbers.extend(find_numbers(line.strip(), i))
         lines.append(line.strip())
 
-prod = 0
+for _ in numbers:
+    if is_adjacent(lines, _):
+        total+= _[0]
+
+print(f"Part 1: {total}")
+
+with open(filename, 'r') as file:
+    for i, line in enumerate(file):
+        gears.extend(find_gears(line.strip(), i))
+
 for _ in gears:
     curr = gear_adjacent(_, numbers) 
-    if curr != []:
+    if curr:
         prod += curr[0][0] * curr[1][0]
+
 print(f"Part 2: {prod}") 
+
+
