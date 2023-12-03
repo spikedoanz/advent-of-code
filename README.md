@@ -7,4 +7,4 @@
 - ~ 17 minutes, super easy. Think I got lucky with the way I stored the intermediate tables for counting up the occurance of the colors
 
 ## Day 3 ##
-- ~ actual hours. Absolutely wrecked my shit. I should have used regex instead of doing manual string parsing. Had to dig on reddit for extra test cases. There were far too many moving parts
+- ~ 2 hours . Absolutely wrecked my shit. I should have used regex instead of doing manual string parsing. Had to dig on reddit for extra test cases. There were far too many moving parts
