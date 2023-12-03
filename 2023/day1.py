@@ -1,5 +1,5 @@
 calibrate=0
-with open("day1.txt", 'r') as file:
+with open("inputday1.txt", 'r') as file:
     for line in file:
         numbers = [int(x) for x in line.strip() if x in '0123456789']
         calibrate+=numbers[0]*10 + numbers[-1] 
@@ -8,7 +8,7 @@ print(f'Part 1: {calibrate}')
 
 calibrate=0
 written=['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-with open("day1.txt", 'r') as file:
+with open("inputday1.txt", 'r') as file:
     for line in file:
         numbers = []
         content=line.strip()

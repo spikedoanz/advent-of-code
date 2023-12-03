@@ -1,4 +1,4 @@
-filename='day3.txt'
+filename='inputday3.txt'
 
 def find_numbers(s, index):
     results=[]

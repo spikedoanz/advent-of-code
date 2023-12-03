@@ -1,7 +1,7 @@
 info=[]
 valid=[]
 
-with open("day2.txt", "r") as file:
+with open("inputday2.txt", "r") as file:
     for index, line in enumerate(file):
         info.append({'index': index,'red': 0,'blue': 0,'green': 0,})
         useful = line.split()[2:]
