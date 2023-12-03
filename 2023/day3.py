@@ -33,14 +33,10 @@ def find_gears(s, index):
     return results
 
 def gear_adjacent(gear, numbers):
-    def get_coords(number):
-        return set([(x, number[3]) for x in range(number[1], number[2]+1)])
+    def get_coords(number): return set([(x, number[3]) for x in range(number[1], number[2]+1)])
     count = 0
     adjacent=[]
-    potential = set([ 
-        (gear[1]-1, gear[3]-1), (gear[1], gear[3]-1), (gear[1]+1, gear[3]-1),
-        (gear[1]-1, gear[3]),   (gear[1], gear[3]),   (gear[1]+1, gear[3]),
-        (gear[1]-1, gear[3]+1), (gear[1], gear[3]+1), (gear[1]+1, gear[3]+1)])
+    potential = set([(x, y) for x in range(gear[1]-1,gear[1]+2) for y in range(gear[3]-1,gear[3]+2)])
     for number in numbers:
         if get_coords(number) & potential:
             count += 1
