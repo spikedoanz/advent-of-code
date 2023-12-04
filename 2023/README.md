@@ -8,3 +8,6 @@
 
 ## Day 3 ##
 - ~ 2 hours . Absolutely wrecked my shit. I should have used regex instead of doing manual string parsing. Had to dig on reddit for extra test cases. There were far too many moving parts
+
+## Day 4 ##
+- ~ 10 minutes. lil ~baby~man~
