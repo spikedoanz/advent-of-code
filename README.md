@@ -7,7 +7,7 @@
 # Planned languages 
 
 - 2023 : Python
-- 2022 : HolyC 
+- 2022 : PICO-8 
 - 2021 : ASM 
 - 2020 : Go
 - 2019 : Clojure
