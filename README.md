@@ -7,8 +7,8 @@
 # Planned languages 
 
 - 2023 : Python
-- 2022 : Wildcard 
-- 2021 : ASM
+- 2022 : HolyC 
+- 2021 : ASM 
 - 2020 : Go
 - 2019 : Clojure
 - 2018 : Rust 
