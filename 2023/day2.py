@@ -19,5 +19,3 @@ total=0
 for _ in info:
     total+=_['red']*_['green']*_['blue']
 print(f'Part 2: {total}')
-
-

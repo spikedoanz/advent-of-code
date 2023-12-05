@@ -11,3 +11,6 @@
 
 ## Day 4 ##
 - ~ 10 minutes. lil ~baby~man~
+
+## Day 5 ##
+- a couple of hours. Hardest day yet, moreso in execution than in terms of concepts. Had to whip out the asserts
