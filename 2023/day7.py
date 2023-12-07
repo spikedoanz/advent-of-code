@@ -37,6 +37,7 @@ def parse_hand2(line):
         cards = cards - 1 
         hand = changeJ(hand)
         cards = 1 if cards == 0 else cards
+
     if cards == 1:
         return '6' + line 
     if cards == 2:
