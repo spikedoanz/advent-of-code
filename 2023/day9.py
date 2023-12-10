@@ -1,10 +1,8 @@
-def zeroes(arr):
-    return all(x == 0 for x in arr) 
 def part1(lines):
     p1 ,pred = 0, 0
     for line in lines:
         curr = [int(x) for x in line.strip().split()]
-        while(not zeroes(curr)):
+        while(not all(x == 0 for x in curr)):
             pred += curr[-1]
             temp = []
             for j in range(len(curr)-1):
@@ -20,7 +18,7 @@ def part2(lines):
         curr = [int(x) for x in line.strip().split()]
         pred = curr[0]
         odd = -1 # left prediction flip flops through addition and subtraction
-        while(not zeroes(curr)):
+        while(not all(x == 0 for x in curr)):
             temp = []
             for j in range(len(curr)-1):
                 temp.append(curr[j+1]-curr[j]) 
