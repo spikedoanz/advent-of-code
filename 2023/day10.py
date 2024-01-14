@@ -32,7 +32,7 @@ def dfs(x, y, lines):
         for line in lines:
             f.write("%s\n" % line)
     return length 
-
+"""
 def interior(lines):
     inn = -1 
     ret = 0
@@ -40,6 +40,7 @@ def interior(lines):
         for char in line:
             if 
     return ret  
+"""
 
 if __name__ == '__main__':
     lines = [line.strip() for line in open('inputday10.test').readlines()]
@@ -48,6 +49,7 @@ if __name__ == '__main__':
             if char == 'S':
                 print(f'Part 1: {dfs(x, y, lines)//2}')
     lines2 = [line.strip() for line in open('inputday10.out').readlines()]
-    print(f'Part 2: {interior(lines2)}')
+#    print(f'Part 2: {interior(lines2)}')
+
 
     

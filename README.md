@@ -31,7 +31,7 @@ Note that per copyright and [Eric Wastl's request](https://www.reddit.com/r/adve
 | [05](2023/day5.py) | ✅ | ✅ | A challenge in optimization. This was much harder in implementation than in conceptualization|
 | [06](2023/day6.py) | ✅ | ✅ | Brute force go BRRRRRRRRRRRRRRRRRRRRRR|
 | [07](2023/day7.py) | ✅ | ✅ | I managed to get a bit sneaky with implicitly using .sort() to handle the hand orderings. Also used an import for the first time |
-| [08](2023/day8.py) | ✅ | ✅ | Saw a tree structure and thought I'd have to whip out Djikstra or something. Fortunate not! |
+| [08](2023/day8.py) | ✅ | ✅ | Saw a tree structure and thought I'd have to whip out Djikstra or something. Fortunately it was just factorization! |
 
 
 ### Join my private leaderboard 
