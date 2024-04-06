@@ -45,7 +45,7 @@ fn getlos(x: i32, y:i32, sx:i32, sy:i32) -> Vec<Vec<(i32,i32)>> {
     let mut swdnr: Vec<(i32,i32)> = Vec::new(); 
     let mut swupl: Vec<(i32,i32)> = Vec::new(); 
     let mut swupr: Vec<(i32,i32)> = Vec::new(); 
-    for ix in 0..sx { //diagonal
+    for ix in 0..sx {
         for iy in 0..sy { 
             if ix == x || iy == y { continue; }
             if iy < 0 || iy >= sy { continue; }
@@ -82,19 +82,17 @@ fn sqdist(a: &(i32, i32), b: &(i32, i32)) -> i32 {
 }
 
 
-fn atmt2(x: i32, y: i32, state: &Vec<Vec<i32>>) -> i32 {
-    let sy = state.len() as i32;
-    let sx = state[0].len() as i32;
+fn atmt2(x: usize, y: usize, state: &Vec<Vec<i32>>, losses: &Vec<Vec<Vec<Vec<(i32,i32)>>>>) -> i32 {
     let mut count = 0;
-    let cs = state[y as usize][x as usize];
+    let cs = state[y][x];
     if cs == 0 { return cs; }
 
-    let los = getlos(x,y,sx,sy);
+    let los = &losses[x][y];
 
     for vec in los {
         for n in vec {
             match state[n.1 as usize][n.0 as usize] {
-                2 => { count += 1; break; }
+                2 => { count += 1; break }
                 1 => { break; }
                 _ => (),
             }
@@ -105,6 +103,7 @@ fn atmt2(x: i32, y: i32, state: &Vec<Vec<i32>>) -> i32 {
     return cs;
 }
 
+#[allow(dead_code)]
 fn prints(state: &Vec<Vec<i32>>) {
     for arr in state {
         println!("{:?}", arr);
@@ -167,21 +166,27 @@ fn part2(filename: &str) -> i32 {
     let sy = flip.len() as i32;
     let sx = flip[0].len() as i32;
     let mut changed = true;
+    let mut losses: Vec<Vec<Vec<Vec<(i32,i32)>>>> = Vec::new();
+    for x in 0..sx {
+        let mut inner: Vec<Vec<Vec<(i32,i32)>>> = Vec::new();
+        for y in 0..sy {
+            inner.push(getlos(x,y,sx,sy));
+        }
+        losses.push(inner);
+    }
+
     while changed {
-        let mut changes = 0;
         changed = false;
         for y in 0..sy {
             for x in 0..sx {
-                let new = atmt2(x,y, &flip);
+                let new = atmt2(x as usize,y as usize, &flip, &losses);
                 if new != flop[y as usize][x as usize] { 
                     changed = true;
-                    changes += 1;
                 }
                 flop[y as usize][x as usize] = new;
             }
         }
         flip = flop.clone();
-        println("{}", changes);
         //prints(&flip);
     }
 
