@@ -1,3 +1,7 @@
 .clj-kondo
 .lsp
 input*
+i*txt
+i*tst
+*test
+*txt
