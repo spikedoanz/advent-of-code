@@ -72,18 +72,41 @@ fn part1(filename: &str) -> i64 {
     return ret;
 }
 
-fn apply_mask2(m: String, b: String) -> String {
-    println!("{}", b);
+fn apply_mask2(m: String, b: String) -> Vec<String> {
     let mask: Vec<char> = m.chars().collect();
-    let mut bin: Vec<char>  = b.chars().collect();
+    let mut bins: Vec<Vec<char>> = Vec::new();
+    bins.push(b.chars().collect());
     for (i, c) in mask.iter().enumerate() {
         match c {
-            'X' => bin[i] = *c,
-            '1' => bin[i] = *c,
+            'X' => {
+                let mut temp: Vec<Vec<char>> = Vec::new();
+                for tbin in &bins {
+                    let mut bin1 = tbin.clone(); bin1[i] = '1';
+                    temp.push(bin1);
+                    let mut bin0 = tbin.clone(); bin0[i] = '0';
+                    temp.push(bin0);
+                }
+                bins = temp;
+            }
+            '1' => {
+                for tbin in &mut bins {
+                    tbin[i] = *c;
+                }
+            }
             _   => (),
         }
     }
-    return bin.iter().collect();
+    let mut ret: Vec<String> = Vec::new();
+    for tbin in bins {
+        ret.push(tbin.iter().collect());
+    }
+    return ret;
+}
+
+fn get_memaddr(s: &str) -> String {
+    let parts: Vec<&str> = s.split("[").collect();
+    let numpart = &parts[1][..parts[1].len()-1];
+    return numpart.to_string();
 }
 
 fn part2(filename: &str) -> i64 {
@@ -102,14 +125,17 @@ fn part2(filename: &str) -> i64 {
             "mask" => mask = opan.to_string(),
             _ => {
                 let bin = num_to_bin(opan);
-                mem.insert(oper.to_string(), apply_mask2(mask.clone(), bin));
+                let memaddrs = num_to_bin(&get_memaddr(oper));
+                for memaddr in apply_mask2(mask.clone(), memaddrs) {
+                    mem.insert(memaddr, bin.clone());
+                }
             }
         }
 
     }
+
     let mut ret = 0;
     for (_key, value) in mem {
-        println!("{} {}", _key, value);
         ret += bin_to_num(value);
     }
     return ret;
@@ -117,5 +143,5 @@ fn part2(filename: &str) -> i64 {
 
 fn main() {
     println!("Part 1: {}", part1("i14.txt"));
-    println!("Part 2: {}", part2("i142.tst"));
+    println!("Part 2: {}", part2("i14.txt"));
 }
