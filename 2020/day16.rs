@@ -42,7 +42,7 @@ fn part1(filename: &str) -> i32 {
     return errrate;
 }
 
-fn part2(filename: &str) -> i32 {
+fn part2(filename: &str) -> i64 {
     let mut lines: Vec<String> = Vec::new();
     let mut valid: HashSet<i32> = HashSet::new();
     let mut fields: Vec<(i32, i32, i32, i32)> = Vec::new();
@@ -101,21 +101,15 @@ fn part2(filename: &str) -> i32 {
         fieldnums.push(currfield);
     }
 
-
-    
-    
     start = false;
-    let mut first = true;
-    let mut last_valid_order_set: HashSet<Vec<i32>> = HashSet::new();
     let mut lasts: Vec<HashSet<i32>> = Vec::new();
     let numfields = fieldnums.len();
-    for line in lines {
+    for line in lines.clone() {
         if line == "nearby tickets:" { start = true; continue; }
         if start {
             let numstrings: Vec<&str> = line.split(",").collect();
             let mut valid_order: Vec<Vec<i32>> = Vec::new();
-            let mut curr_valid_order_set: HashSet<Vec<i32>> = HashSet::new();
-            for (i, string) in numstrings.iter().enumerate() {
+            for (_i, string) in numstrings.iter().enumerate() {
                 let mut curr_pos: Vec<i32> = Vec::new();
                 let num = string.parse::<i32>().unwrap();
                 for (j, field) in fieldnums.iter().enumerate() {
@@ -131,7 +125,7 @@ fn part2(filename: &str) -> i32 {
             }
             */
             for (i,order) in valid_order.iter().enumerate() {
-                let mut curr: HashSet<i32> =order.clone().into_iter().collect();
+                let curr: HashSet<i32> =order.clone().into_iter().collect();
                 if lasts.len() <= i {
                     lasts.push(curr);
                 }
@@ -141,27 +135,36 @@ fn part2(filename: &str) -> i32 {
             }
         }
     }
-
-    
-
-    /*
-    for thing in fieldnums {
-        println!("{:?}", thing);
+    start = false;
+    let mut ticket_nums: Vec<i64> = Vec::new();
+    for line in &lines {
+        if line == "your ticket:" { start = true; continue; }
+        if start {
+            let numstrings: Vec<&str> = line.split(",").collect();
+            for num in numstrings {
+                ticket_nums.push(num.parse::<i64>().unwrap());
+            }
+            break;
+        }
     }
-    */
-    //let seen: HashSet<i32> = vec![8,12,18,15,6,14,10,17,1,2,3].into_iter().collect();
+
     let mut seen: HashSet<i32> = HashSet::new();
-    for i in 0..numfields {
+    let mut ret: i64 = 1;
+    for _ in 0..numfields {
         for (i, order) in lasts.iter().enumerate() {
             let diff: HashSet<&i32> = order.difference(&seen).collect();
             if diff.len() == 1 {
                 let hit = diff.iter().next().unwrap();
-                println!("{}: {}", i, hit);
+                if **hit < 6 {
+                    ret *= ticket_nums[i];
+                }
                 seen.insert(**hit);
             }
         }
     }
-    return 0;
+
+    
+    return ret;
 }
 
 fn main() {
