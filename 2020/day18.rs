@@ -1,8 +1,7 @@
 mod aoc; use aoc::*;
 
 fn apply(a: i64 , b: i64, op: i64) -> i64 {
-    if op == 0 { return a + b; }
-    return a * b;
+    (1 - op) * (a + b) + op * (a * b) 
 }
 
 fn parse(line: &[char], i: &mut usize) -> i64 {
@@ -27,24 +26,15 @@ fn parse(line: &[char], i: &mut usize) -> i64 {
         }
         *i += 1;
     }
-    return ret;
+    ret
 }
 
 fn part1(filename: &str) -> i64 {
     let mut ret: i64 = 0;
-    let mut lines: Vec<String> = Vec::new();
     for line in readlines(filename).expect("lines") {
-        lines.push(line.expect("line"));
+        ret += parse(&line.expect("").chars().collect::<Vec<_>>(), &mut 0);
     }
-    for line in lines {
-        let mut i: usize = 0;
-        println!("{}", line);
-        // println!(" -> {}", parse(&line.chars().collect::<Vec<_>>(), &mut i));
-        ret += parse(&line.chars().collect::<Vec<_>>(), &mut i);
-        // println!("{}", u);
-    }
-
-    return ret;
+    ret
 }
 
 
