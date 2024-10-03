@@ -1,4 +1,4 @@
-# ❄️ Spike's Advent of Code Wild Ride️ #
+# advent #
 
 ---
 
