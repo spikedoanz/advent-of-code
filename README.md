@@ -9,13 +9,13 @@ Note that per copyright and [Eric Wastl's request](https://www.reddit.com/r/adve
 | Year | Languages Planned |
 |------|-------------------|
 | 2023 | Python |
-| 2022 | Esolangs|
+| 2022 | Javascript|
 | 2021 | Go |
 | 2020 | Rust |
 | 2019 | Clojure |
-| 2018 | Assembly |
+| 2018 | Lean |
 | 2017 | C/C++ |
-| 2016 | Javascript |
+| 2016 | Javascript (placeholder) |
 | 2015 | Haskell |
 
 ### Join my private leaderboard 
