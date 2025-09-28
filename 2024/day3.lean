@@ -1,8 +1,8 @@
 import Aoc.AocInputs
 
 def parseNum (s : List Char) : Option (List Char × List Char) × List Char :=
-  let digitsA := s.takeWhile (·.isDigit)
-  let rstA     := s.dropWhile (·.isDigit)
+  let digitsA   := s.takeWhile (·.isDigit)
+  let rstA      := s.dropWhile (·.isDigit)
   match rstA with
   | ',' :: rstB =>
     let digitsB := rstB.takeWhile (·.isDigit)
@@ -30,10 +30,37 @@ def pairToInts (a : List Char × List Char) : Option (Int × Int) :=
   | some x, some y => some (x, y)
   | _, _ => none
 
-def nums := (parseMul (day3test.toList) []).filterMap pairToInts
+def nums1 := (parseMul (day3test.toList) []).filterMap pairToInts
 
-#eval nums.map (fun (a,b) => a * b) |>.sum
+#eval nums1.map (fun (a,b) => a * b) |>.sum
 
 --------------------------------------------------------------------------------
 
+partial def parseMulToggle 
+  (s : List Char) 
+  (acc : List (List Char × List Char)) 
+  (flag : Bool)
+  : List (List Char × List Char) := 
+  match s with
+  -- number parsing
+  | 'm' :: 'u' :: 'l' :: '(' :: rstA => 
+    let (nums, rstB) := parseNum rstA
+    match nums with
+    | some pair => 
+      match flag with -- flag only gets consumed if pair matched
+      | true  =>  parseMulToggle rstB (pair :: acc) flag 
+      | _     =>  parseMulToggle rstB acc flag -- toss pair if flag false
+    | _ =>        parseMulToggle rstA acc flag
+  -- flags entrypoint
+  | 'd' :: 'o' :: '(' :: ')' :: rst =>
+    parseMulToggle rst acc true
+  | 'd' :: 'o' :: 'n' :: '\'' :: 't' :: '(' :: ')' :: rst =>
+    parseMulToggle rst acc false 
+  -- base cases
+  | _ :: rstA => parseMulToggle rstA acc flag
+  | _ => acc
 
+def nums2 := (parseMulToggle (day3test.toList) [] true).filterMap pairToInts
+
+#eval nums2
+#eval nums2.map (fun (a,b) => a * b) |>.sum
