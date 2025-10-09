@@ -52,7 +52,7 @@ def lsts := toLists snd  ","
 def validated := lsts.filter (λ x => validate orders x)
 def getMiddle (l : List Nat) := l[l.length / 2]!
 
-#eval validated.map getMiddle |>.sum
+def part1 := validated.map getMiddle |>.sum
 --------------------------------------------------------------------------------
 
 
@@ -104,6 +104,8 @@ def getMinEdge (g : Graph) : Option Nat :=
   | [] => none
   | h :: t => some (t.foldl (fun min x => if x.2.length < min.2.length then x else min) h).1
 
+
+
 partial def topoSort (l : List Nat) (g : Graph) : List Nat :=
   match g with
   | [] => []
@@ -116,5 +118,18 @@ partial def topoSort (l : List Nat) (g : Graph) : List Nat :=
       | _ => topoSort l graph'
     | none => []
 
+def localSort (l : List Nat) (orders : List (List Nat)) : List Nat :=
+  let localOrders := orders.filter (fun order =>
+    match order with
+    | [a,b] => l.contains a && l.contains b
+    | _ => false)
+  let localGraph := buildGraph localOrders
+  topoSort l localGraph
+
 def unvalidated := lsts.filter (λ x => !validate orders x)
-#eval unvalidated.map (fun x => topoSort x graph) |>.map getMiddle |>.sum
+def sortedUnvalidated := unvalidated.map (fun x => localSort x orders)
+#eval sortedUnvalidated
+def part2 := sortedUnvalidated |>.map getMiddle |>.sum
+
+#eval part1
+#eval part2
