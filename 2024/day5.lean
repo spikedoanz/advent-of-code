@@ -1,17 +1,8 @@
 import Std 
 import Aoc.AocTestInputs
 
-def input := day5input
-def halves := input.splitOn "\n\n"
-def fst := halves[0]!.splitOn "\n"
-def snd := halves[1]!.splitOn "\n"
-
 def toLists (l : List String) (sep : String) : List (List Nat) := 
   l.map (λ x => x.splitOn sep |>.filterMap (λ x => x.toNat?)) |>.filter (λ x => x != [])
-
--- first part handling
-def orders := toLists fst "|" |>.filter (λ x => x.length == 2)
-#eval orders
 
 def getOrders (orders : List (List Nat)) (n : Nat) :=
   let matched := orders.filter (λ x => x[1]! == n)
@@ -31,30 +22,12 @@ def isAnyIn (l : List Nat) (ns : List Nat) : Bool :=
   | fst :: rst => (isIn l fst) || isAnyIn l rst
   | [] => false
 
-#eval getOrders orders 47
-
 def validate (orders : List (List Nat)) (l : List Nat) : Bool :=
   match l with
   | fst :: rst => 
     let matched := getOrders orders fst
     !(isAnyIn rst matched) && validate orders rst
   | [] => true
-  
-
--- second part handling
-def lsts := toLists snd  ","
-
-#check List.find?
-
-#eval lsts
-#eval lsts[0]!
-#eval isAnyIn lsts[0]! [1, 1, 47]
-def validated := lsts.filter (λ x => validate orders x)
-def getMiddle (l : List Nat) := l[l.length / 2]!
-
-def part1 := validated.map getMiddle |>.sum
---------------------------------------------------------------------------------
-
 
 def Graph := List (Nat × List Nat)
 
@@ -97,7 +70,6 @@ def removeEdge (g: Graph) (e: Nat) : Graph :=
     else  (h.1, h.2.filter (fun x => x != e)) :: removeEdge g' e
   | [] => []
 
-def graph := buildGraph orders
 
 def getMinEdge (g : Graph) : Option Nat :=
   match g with
@@ -126,9 +98,23 @@ def localSort (l : List Nat) (orders : List (List Nat)) : List Nat :=
   let localGraph := buildGraph localOrders
   topoSort l localGraph
 
+--------------------------------------------------------------------------------
+
+def input := day5input
+def halves := input.splitOn "\n\n"
+def fst := halves[0]!.splitOn "\n"
+def snd := halves[1]!.splitOn "\n"
+
+def orders := toLists fst "|" |>.filter (λ x => x.length == 2)
+def lsts := toLists snd  ","
+
+def validated := lsts.filter (λ x => validate orders x)
+def getMiddle (l : List Nat) := l[l.length / 2]!
+
 def unvalidated := lsts.filter (λ x => !validate orders x)
 def sortedUnvalidated := unvalidated.map (fun x => localSort x orders)
-#eval sortedUnvalidated
+
+def part1 := validated.map getMiddle |>.sum
 def part2 := sortedUnvalidated |>.map getMiddle |>.sum
 
 #eval part1
