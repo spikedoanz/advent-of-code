@@ -99,7 +99,6 @@ def localSort (l : List Nat) (orders : List (List Nat)) : List Nat :=
   topoSort l localGraph
 
 --------------------------------------------------------------------------------
-
 def input := day5input
 def halves := input.splitOn "\n\n"
 def fst := halves[0]!.splitOn "\n"

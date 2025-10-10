@@ -70,8 +70,7 @@ def countXPattern (matrix : Array (Array Char)) : Nat := Id.run do
   return count
 
 --------------------------------------------------------------------------------
-
-def input := day4test
+def input := day4input
 def matrix := parseMatrix input
 
 def part1 := countWord matrix "XMAS"

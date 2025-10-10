@@ -55,9 +55,9 @@ def pairToInts (a : List Char × List Char) : Option (Int × Int) :=
   | _, _ => none
 
 --------------------------------------------------------------------------------
-
-def nums1 := (parseMul (day3test.toList) []).filterMap pairToInts
-def nums2 := (parseMulToggle (day3test.toList) [] true).filterMap pairToInts
+def input := day3input
+def nums1 := (parseMul (input.toList) []).filterMap pairToInts
+def nums2 := (parseMulToggle (input.toList) [] true).filterMap pairToInts
 
 def part1 := nums1.map (fun (a,b) => a * b) |>.sum
 def part2 := nums2.map (fun (a,b) => a * b) |>.sum

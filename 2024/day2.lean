@@ -1,3 +1,4 @@
+import Aoc.AocInputs
 def diff (l : List Int) : List Int :=
   List.zipWith (λ a b => a - b)  (l.drop 1) l
 
@@ -26,15 +27,7 @@ def is_safe_with_removal (l : List Int) : Bool :=
 def _count : Bool -> Nat := λ x => if x then 1 else 0
 
 --------------------------------------------------------------------------------
-
-def input := ("
-7 6 4 2 1
-1 2 7 8 9
-9 7 6 2 1
-1 3 2 4 5
-8 6 4 4 1
-1 3 6 7 9
-".splitOn "\n").filter (λ x => x != "")
+def input := day2input.splitOn "\n" |>.filter (λ x => x != "")
 
 def nums := input.map (λ line => (line.splitOn " ").filterMap (·.toInt?))
 
