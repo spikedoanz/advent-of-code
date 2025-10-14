@@ -1,67 +1,84 @@
-import Aoc.AocInputs
+import Aoc.AocTestInputs
+
+def inBounds (m : List (List Char)) (y : Nat) (x : Nat) : Bool :=
+  y < m.length && (match m[y]? with | some line => x < line.length | none => false)
+
+def getChar (m : List (List Char)) (y : Nat) (x : Nat) : Char :=
+  if inBounds m y x then m[y]![x]! else ' '
+
+def findCursor (m : List (List Char)) : Option (Nat × Nat × Char) :=
+  let rec findInLine (l : List Char) (y : Nat) (x : Nat) : Option (Nat × Nat × Char) :=
+    match l with
+    | [] => none
+    | c :: rst => 
+      if c == '^' || c == '>' || c == 'v' || c == '<' 
+      then some (y, x, c)
+      else findInLine rst y (x + 1)
+  
+  let rec findInMatrix (lines : List (List Char)) (y : Nat) : Option (Nat × Nat × Char) :=
+    match lines with
+    | [] => none
+    | line :: rst =>
+      match findInLine line y 0 with
+      | some coord => some coord
+      | none => findInMatrix rst (y + 1)
+  
+  findInMatrix m 0
+
+def turnRight (dir : Char) : Char :=
+  match dir with
+  | '^' => '>'
+  | '>' => 'v'
+  | 'v' => '<'
+  | '<' => '^'
+  | _ => dir
+
+def getNextPos (y : Nat) (x : Nat) (dir : Char) : (Int × Int) :=
+  match dir with
+  | '^' => (y - 1, x)
+  | '>' => (y, x + 1)
+  | 'v' => (y + 1, x)
+  | '<' => (y, x - 1)
+  | _ => (y, x)
+
+def simulate (m : List (List Char)) (startY : Nat) (startX : Nat) (startDir : Char) : Nat :=
+  let rec loop (y : Nat) (x : Nat) (dir : Char) (visited : List (Nat × Nat)) (fuel : Nat) : List (Nat × Nat) :=
+    if fuel = 0 then visited
+    else
+      -- add current position to visited
+      let newVisited := if visited.contains (y, x) then visited else (y, x) :: visited
+      
+      -- get next position
+      let (nextY, nextX) := getNextPos y x dir
+      
+      -- check if next position is out of bounds
+      if nextY < 0 || nextX < 0 then newVisited
+      else
+        let nextY' := nextY.toNat
+        let nextX' := nextX.toNat
+        
+        if !inBounds m nextY' nextX' then newVisited
+        else
+          -- check what's at the next position
+          let nextChar := getChar m nextY' nextX'
+          if nextChar == '#' then
+            -- turn right and stay in same position
+            loop y x (turnRight dir) newVisited (fuel - 1)
+          else
+            -- move forward
+            loop nextY' nextX' dir newVisited (fuel - 1)
+  
+  let visited := loop startY startX startDir [] 10000
+  visited.length
+
+def part1 (matrix : List (List Char)) : Nat :=
+  match findCursor matrix with
+  | none => 0
+  | some (y, x, dir) => simulate matrix y x dir
+
+--------------------------------------------------------------------------------
 
 def input := day6input
+def matrix := input.splitOn "\n" |>.map String.toList
 
-/-
-example input
-....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#...
-
-expected answer 41
--/
-
-#eval input
-/-
-seems to be a cellular automata problem
-shape patterns: (patt1)
-  #   ->   #
-  ^        >
-
-  >#  ->   V#
-
-  V   ->   <
-  #        #
-
-  #<  ->   #^
-
- ' '  ->   ^   -- skips empty spaces. ditto for the rest
-  ^       ' '
-only pattern matching with the cell immediately in front of the cursor is important
-rewriting the entire matrix seems inefficient (as is for a pure functional approach
-so a local rewrite is possible:
-
-there is also the pattern of the cursor shift (patt2)
-
-  on positions where x merely rotates:
-  #  -> (curr_x, curr_y), (next_x, next_y) -> (curr_x, curr_y), (curr_x + 1, curr_y)
-  ^
-        - cursor position didn't change, so curr position didn't change
-        - but where it points changes, thus changing (next_x, next_y)
-  
-  on positions where x moves forward:
- ' ' -> (curr_x, curr_y), (next_x, next_y) -> (next_x, next_y), (next_x, next_y - 1)
-  ^
-
-  - coordinate system is based off array indexing position, from the og input
-  
-let mut seen_idx := ![]
-while cursor is on screen:
-  1. track 2 tuples: (curr_x, curr_y), (next_x, next_y)
-  2. extract out from matrix
-  3. match against one of the patterns in (patt1)
-  4. rewrite the pattern into the matrix
-  5. update the coordinate tuple, based on (patt2)
-  6. attempt insert into seen_idx (if hasn't seen, insert, else ignore)
-
-#eval seen_idx.sum
--/
-
-
+#eval part1 matrix
